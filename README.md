@@ -1,8 +1,14 @@
-# Planor backend
+# Planor Backend
+
+<div align="center">
+    <img src="https://planorsoft.com/logo.svg" width="200px" height="200px">
+</div>
+
+Backend application for planorsoft. Developed using .Net technologies such as Hangfire, Entity Framework Core, Fluent Validation and Automapper. N-Layer architecture and CQRS were used in the architecture of the project. We chose MySQL as our main database because we wanted to benefit from the great support from database providers such as planetscale.
 
 ## Development
 
-Aşağıdaki komut ile API uygulamasını çalıştırabilirsin.
+Planor.WebUI directory is entrypoint for project. Run this project and you can access this project in localhost:5050 
 
 ```bash
 
@@ -11,7 +17,9 @@ dotnet watch run
 
 ```
 
-Docker ile mysql ayağa kaldırmak için aşağıdaki komut kullanılabilir. Servis bağımlılık olarak mysql veritabanına ihtiyaç duyar, mysql connection ile ilgili bilgiler appsettings.json içerisinde bulunabilir, eğer erişilebilir bir mysql veritabanı bulamazsa uygulama ayağa kalkarken durdurulur. 
+## Local database
+
+This command can be used for running MySQL database with Docker. Connection strings can be found on appsettings.json
 
 ```bash
 
@@ -22,7 +30,7 @@ docker compose -f docker-compose.development.yml down
 
 ## Docker
 
-Mysql bağımlılıkları eklenmiş bir şekilde tek bir komutla localhost:5050 adresinden kullanılabilecek uygulamayı erişime sunar. Bilgisayar Docker kurulu olması gerekmektedir.
+If you do not want to deal with development, you can run the backend project with the database using Docker Compose. You will be able to access the project at localhost:5050.
 
 ```bash
 
