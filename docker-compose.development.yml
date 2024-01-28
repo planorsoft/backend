@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  planor_mysql:
+    image: mysql:8.0.30
+    container_name: planor_mysql
+    ports:
+      - "3306:3306"  
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234  
+      MYSQL_DATABASE: planor
+    networks:
+      - planor_network
+  
+networks:
+  planor_network:

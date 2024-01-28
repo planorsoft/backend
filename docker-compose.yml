@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  planor_mysql:
+    image: mysql:8.0.30
+    container_name: planor_mysql
+    ports:
+      - "3306:3306"  
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234  
+      MYSQL_DATABASE: planor
+    networks:
+      - planor_network
+
+  planor_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5050"  # Adjust the port mapping as needed
+    depends_on:
+      - planor_mysql
+      - planor_tenant_mysql
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - planor_network
+    restart: on-failure
+
+networks:
+  planor_network:
