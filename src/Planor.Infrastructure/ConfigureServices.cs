@@ -75,7 +75,7 @@ public static class ConfigureServices
                 };
             });
 
-        services.InitialiseHangfireDatabase(configuration);
+        // services.InitialiseHangfireDatabase(configuration);
 
         services.AddHangfire(config => config
             .UseSimpleAssemblyNameTypeSerializer()

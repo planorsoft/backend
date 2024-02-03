@@ -11,8 +11,8 @@ using Planor.Infrastructure.Persistence;
 namespace Planor.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231222185125_updateEventAddedAttendee")]
-    partial class updateEventAddedAttendee
+    [Migration("20240203082225_initalCreate")]
+    partial class initalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -732,6 +732,115 @@ namespace Planor.Infrastructure.Migrations
                     b.ToTable("events");
                 });
 
+            modelBuilder.Entity("Planor.Domain.Entities.Finance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("float")
+                        .HasColumnName("amount");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("finance_category_id");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("bigint")
+                        .HasColumnName("created");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("created_by");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("customer_id");
+
+                    b.Property<long>("Date")
+                        .HasColumnType("bigint")
+                        .HasColumnName("date");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsIncome")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_income");
+
+                    b.Property<long?>("LastModified")
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<int?>("ProjectId")
+                        .HasColumnType("int")
+                        .HasColumnName("project_id");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("finances");
+                });
+
+            modelBuilder.Entity("Planor.Domain.Entities.FinanceCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("bigint")
+                        .HasColumnName("created");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("created_by");
+
+                    b.Property<long?>("LastModified")
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("name");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("finance_categories");
+                });
+
             modelBuilder.Entity("Planor.Domain.Entities.MailTemplate", b =>
                 {
                     b.Property<int>("Id")
@@ -782,6 +891,52 @@ namespace Planor.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("mail_templates");
+                });
+
+            modelBuilder.Entity("Planor.Domain.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("bigint")
+                        .HasColumnName("created");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("created_by");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int")
+                        .HasColumnName("event_id");
+
+                    b.Property<string>("JobId")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("job_id");
+
+                    b.Property<long?>("LastModified")
+                        .HasColumnType("bigint")
+                        .HasColumnName("last_modified");
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<string>("TenantId")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("tenant_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("notification");
                 });
 
             modelBuilder.Entity("Planor.Domain.Entities.Project", b =>
@@ -1175,6 +1330,40 @@ namespace Planor.Infrastructure.Migrations
                     b.Navigation("Duty");
                 });
 
+            modelBuilder.Entity("Planor.Domain.Entities.Finance", b =>
+                {
+                    b.HasOne("Planor.Domain.Entities.FinanceCategory", "Category")
+                        .WithMany("Finances")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Planor.Domain.Entities.Customer", "Customer")
+                        .WithMany("Finances")
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("Planor.Domain.Entities.Project", "Project")
+                        .WithMany("Finances")
+                        .HasForeignKey("ProjectId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Planor.Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("Planor.Domain.Entities.Event", "Event")
+                        .WithMany("Notifications")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("Planor.Domain.Entities.Project", b =>
                 {
                     b.HasOne("Planor.Domain.Entities.Currency", "Currency")
@@ -1265,6 +1454,8 @@ namespace Planor.Infrastructure.Migrations
                 {
                     b.Navigation("Contacts");
 
+                    b.Navigation("Finances");
+
                     b.Navigation("Projects");
                 });
 
@@ -1288,9 +1479,21 @@ namespace Planor.Infrastructure.Migrations
                     b.Navigation("Duties");
                 });
 
+            modelBuilder.Entity("Planor.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("Notifications");
+                });
+
+            modelBuilder.Entity("Planor.Domain.Entities.FinanceCategory", b =>
+                {
+                    b.Navigation("Finances");
+                });
+
             modelBuilder.Entity("Planor.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Duties");
+
+                    b.Navigation("Finances");
                 });
 #pragma warning restore 612, 618
         }
