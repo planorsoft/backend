@@ -214,6 +214,29 @@ namespace Planor.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "finance_categories",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    tenant_id = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    created = table.Column<long>(type: "bigint", nullable: false),
+                    created_by = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    last_modified = table.Column<long>(type: "bigint", nullable: true),
+                    last_modified_by = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_finance_categories", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "mail_templates",
                 columns: table => new
                 {
@@ -365,6 +388,36 @@ namespace Planor.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "notification",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    job_id = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    event_id = table.Column<int>(type: "int", nullable: false),
+                    tenant_id = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    created = table.Column<long>(type: "bigint", nullable: false),
+                    created_by = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    last_modified = table.Column<long>(type: "bigint", nullable: true),
+                    last_modified_by = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_notification", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_notification_events_event_id",
+                        column: x => x.event_id,
+                        principalTable: "events",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -461,6 +514,7 @@ namespace Planor.Infrastructure.Migrations
                     description = table.Column<string>(type: "varchar(4096)", maxLength: 4096, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     price = table.Column<double>(type: "double", nullable: false),
+                    currency_id = table.Column<int>(type: "int", nullable: true),
                     tenant_id = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     created = table.Column<long>(type: "bigint", nullable: false),
@@ -473,6 +527,11 @@ namespace Planor.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_projects", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_projects_currencies_currency_id",
+                        column: x => x.currency_id,
+                        principalTable: "currencies",
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_projects_customers_customer_id",
                         column: x => x.customer_id,
@@ -584,6 +643,32 @@ namespace Planor.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "EventUser",
+                columns: table => new
+                {
+                    AttendeeId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    EventId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventUser", x => new { x.AttendeeId, x.EventId });
+                    table.ForeignKey(
+                        name: "FK_EventUser_AspNetUsers_AttendeeId",
+                        column: x => x.AttendeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventUser_events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "events",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "duties",
                 columns: table => new
                 {
@@ -635,6 +720,51 @@ namespace Planor.Infrastructure.Migrations
                         principalTable: "projects",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "finances",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    description = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    amount = table.Column<float>(type: "float", nullable: false),
+                    is_income = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    finance_category_id = table.Column<int>(type: "int", nullable: false),
+                    date = table.Column<long>(type: "bigint", nullable: false),
+                    customer_id = table.Column<int>(type: "int", nullable: true),
+                    project_id = table.Column<int>(type: "int", nullable: true),
+                    tenant_id = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    created = table.Column<long>(type: "bigint", nullable: false),
+                    created_by = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    last_modified = table.Column<long>(type: "bigint", nullable: true),
+                    last_modified_by = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_finances", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_finances_customers_customer_id",
+                        column: x => x.customer_id,
+                        principalTable: "customers",
+                        principalColumn: "id");
+                    table.ForeignKey(
+                        name: "FK_finances_finance_categories_finance_category_id",
+                        column: x => x.finance_category_id,
+                        principalTable: "finance_categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_finances_projects_project_id",
+                        column: x => x.project_id,
+                        principalTable: "projects",
+                        principalColumn: "id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -822,9 +952,39 @@ namespace Planor.Infrastructure.Migrations
                 column: "duty_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EventUser_EventId",
+                table: "EventUser",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_finances_customer_id",
+                table: "finances",
+                column: "customer_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_finances_finance_category_id",
+                table: "finances",
+                column: "finance_category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_finances_project_id",
+                table: "finances",
+                column: "project_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_notification_event_id",
+                table: "notification",
+                column: "event_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_project_join_tag_TagsId",
                 table: "project_join_tag",
                 column: "TagsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_projects_currency_id",
+                table: "projects",
+                column: "currency_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_projects_customer_id",
@@ -863,10 +1023,16 @@ namespace Planor.Infrastructure.Migrations
                 name: "duty_todos");
 
             migrationBuilder.DropTable(
-                name: "events");
+                name: "EventUser");
+
+            migrationBuilder.DropTable(
+                name: "finances");
 
             migrationBuilder.DropTable(
                 name: "mail_templates");
+
+            migrationBuilder.DropTable(
+                name: "notification");
 
             migrationBuilder.DropTable(
                 name: "project_join_tag");
@@ -878,10 +1044,16 @@ namespace Planor.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "duties");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "duties");
+                name: "finance_categories");
+
+            migrationBuilder.DropTable(
+                name: "events");
 
             migrationBuilder.DropTable(
                 name: "tags");
