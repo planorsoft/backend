@@ -28,7 +28,7 @@ public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest,
         }
         catch (Exception ex)
         {
-            _logger.LogError("Planor Request: Unhandled Exception for Request {Name} {@Request}", requestName, request);
+            _logger.LogError("Planor Request: Unhandled Exception for Request {Name} {@Request} {Message} {StackTrace}", requestName, request, ex.Message, ex.StackTrace);
             return await next();
         }
     }
