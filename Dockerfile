@@ -2,6 +2,10 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+RUN apk add --no-cache \
+        icu-data-full \
+        icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
