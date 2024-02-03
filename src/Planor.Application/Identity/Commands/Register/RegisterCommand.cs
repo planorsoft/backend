@@ -47,7 +47,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, bool>
 
     public async Task<bool> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        // Eğer Manager veya Customer değilse
+        // Eğer Manager veya Customer değil ise 
         if (request.Role != Domain.Constants.Roles.Manager && request.Role != Domain.Constants.Roles.Customer)
         {
             throw new BadRequestException("Manager veya Customer olmayan kullanıcı yeni hesap oluşturamaz.");
