@@ -2,6 +2,7 @@
 
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ using Planor.Application.Tags.Queries.GetTagsWithPagination;
 using Planor.Application.Users.Queries.GetUser;
 using Planor.Domain.Constants;
 using Planor.Domain.Entities;
+using Planor.Domain.Exceptions;
 
 namespace Planor.WebUI.Controllers;
 
@@ -44,9 +46,13 @@ public class QueryController : ODataController
     [Authorize]
     [EnableQuery]
     [ODataAttributeRouting]
-    public IQueryable<UserDto> GetUsers()
+    public IQueryable<UserDto> GetUsers([FromQuery] string tenant)
     {
-        var result = _userManager.Users
+        if (tenant is null) throw new BadRequestException("tenant must not be null");
+        
+        var result = _userManager
+            .Users
+            .Where(x => x.TenantId == tenant)
             .ProjectTo<UserDto>(_mapper.ConfigurationProvider);
 
         return result;
