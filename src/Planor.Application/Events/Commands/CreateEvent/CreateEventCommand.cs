@@ -67,7 +67,7 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, int
 
         foreach (var attendee in entity.Attendee)
         {
-            SendNotification(entity, attendee, notifications);
+            ScheduleNotification(entity, attendee, notifications);
         }
 
         var currentUser = new User
@@ -76,7 +76,7 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, int
             Email = _currentUserService.Email
         };
 
-        SendNotification(entity, currentUser, notifications);
+        ScheduleNotification(entity, currentUser, notifications);
 
         _context.Notifications.AddRange(notifications);
 
@@ -103,7 +103,7 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, int
         }
     }
 
-    private void SendNotification(Event entity, User attendee, IList<Notification> notifications)
+    private void ScheduleNotification(Event entity, User attendee, IList<Notification> notifications)
     {
         var data = new
         {

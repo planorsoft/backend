@@ -61,7 +61,7 @@ public static class ConfigureServices
                 .AddRouteComponents(
                     "api/odata", modelBuilder.GetEdmModel()
                 )
-            );
+        );
         
         return services;
     }

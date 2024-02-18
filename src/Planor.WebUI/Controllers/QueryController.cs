@@ -46,7 +46,7 @@ public class QueryController : ODataController
     [Authorize]
     [EnableQuery]
     [ODataAttributeRouting]
-    public IQueryable<UserDto> GetUsers([FromQuery] string tenant)
+    public IQueryable<UserDto> GetUsers([FromHeader(Name = "Planor-Tenant")] string tenant)
     {
         if (tenant is null) throw new BadRequestException("tenant must not be null");
         
