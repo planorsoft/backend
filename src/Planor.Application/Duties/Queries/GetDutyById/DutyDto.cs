@@ -1,5 +1,6 @@
 using Planor.Application.Common.Mappings;
 using Planor.Application.Tags.Queries.GetTagsWithPagination;
+using Planor.Application.Users.Queries.GetUser;
 using Planor.Domain.Entities;
 
 namespace Planor.Application.Duties.Queries.GetDutyById;
@@ -29,4 +30,6 @@ public class DutyDto : IMapFrom<Duty>
     public int Order { get; set; }
     
     public string AssignedTo { get; set; } = null!;
+
+    public ICollection<UserSmallDto> Helpers { get; set; } = new List<UserSmallDto>();
 }

@@ -36,6 +36,9 @@ public class Duty : BaseAuditableEntity
     
     [Column("assigned_to")] 
     public string? AssignedTo { get; set; }
+    
+    // m-m
+    public ICollection<User> Helpers { get; set; } = new List<User>();
 
     // o-m
     public ICollection<DutyTodo> Todos { get; set; } = new List<DutyTodo>();

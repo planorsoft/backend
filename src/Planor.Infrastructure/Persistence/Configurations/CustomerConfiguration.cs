@@ -17,12 +17,14 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasMany(x => x.Projects)
             .WithOne(x => x.Customer)
             .HasForeignKey(x => x.CustomerId)
-            .IsRequired(false);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder
             .HasMany(x => x.Contacts)
             .WithOne(x => x.Customer)
             .HasForeignKey(x => x.CustomerId)
-            .IsRequired(false);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -14,6 +14,10 @@ public class DutyConfiguration : IEntityTypeConfiguration<Duty>
 
         builder.Property(t => t.Description)
             .HasMaxLength(4096);
+
+        builder
+            .HasMany(x => x.Helpers)
+            .WithMany();
         
         builder
             .HasMany(x => x.Todos)

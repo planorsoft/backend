@@ -1,4 +1,5 @@
 using Planor.Application.Common.Mappings;
+using Planor.Application.Users.Queries.GetUser;
 using Planor.Domain.Entities;
 
 namespace Planor.Application.Events.Queries;
@@ -19,5 +20,5 @@ public class EventDto : IMapFrom<Event>
 
     public string Color { get; set; } = null!;
     
-    public ICollection<AttendeeDto> Attendee { get; set; } = new List<AttendeeDto>();
+    public ICollection<UserSmallDto> Attendee { get; set; } = new List<UserSmallDto>();
 }
