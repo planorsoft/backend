@@ -11,6 +11,8 @@ public class ProjectSmallDto  : IMapFrom<Project>
     
     public string Title { get; set; } = null!;
     
+    public string? Description { get; set; }
+    
     public bool IsCompleted { get; set; }
 
     public double Price { get; set; }
