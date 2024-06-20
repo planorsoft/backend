@@ -42,8 +42,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
     
-    app.UseHangfireDashboard();
-    app.MapHangfireDashboard();
+    // app.UseHangfireDashboard();
+    // app.MapHangfireDashboard();
 }
 
 app.UseSerilogRequestLogging();
@@ -52,11 +52,7 @@ app.UseCors(myAllowedOrigins);
 
 app.InitialiseDatabase();
 
-// app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
-// app.UseODataRouteDebug();
 
 app.MapControllers();
 
