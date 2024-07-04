@@ -9,7 +9,7 @@ using Planor.Application.Tags.Queries.GetTagsWithPagination;
 
 namespace Planor.Application.Reports.Queries.GetProjectsSummary;
 
-public class GetProjectsSummaryQuery: IRequest<GetProjectsSummaryDto>
+public class GetProjectsSummaryQuery : IRequest<GetProjectsSummaryDto>
 {
     
 }
